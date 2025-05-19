@@ -1,10 +1,8 @@
 import { app, BrowserWindow, ipcMain } from 'electron'
-import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 import { exec } from 'child_process';
 
-const require = createRequire(import.meta.url)
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 // The built directory structure
@@ -27,16 +25,18 @@ process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL ? path.join(process.env.APP_ROOT, 
 
 let win: BrowserWindow | null
 
-ipcMain.handle('shutdown', () => {
-  exec('shutdown -s -t 60'); // Windows示例：60秒后关机
+ipcMain.handle("shutdown", async () => {
+  exec("shutdown -s -t 0");
 });
 
 function createWindow() {
   win = new BrowserWindow({
     icon: path.join(process.env.VITE_PUBLIC, 'electron-vite.svg'),
-    width: 600,
-    height: 500,
+    width: 300,
+    height: 190,
     resizable: false,
+    alwaysOnTop: true,
+    autoHideMenuBar: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.mjs'),
     },
